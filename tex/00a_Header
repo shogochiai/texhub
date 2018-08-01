@@ -1,0 +1,13 @@
+\documentclass[12pt,a4paper,pdflatex]{article}
+\usepackage[utf8]{inputenc}
+
+\title{Whitepaper Title}
+\author{John Doe john@cryptoeconomicslab.com}
+\date{Aug 1, 2018}
+ 
+\begin{document}
+ 
+\maketitle
+{\centering\scriptsize
+    Text
+}

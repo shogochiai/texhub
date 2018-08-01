@@ -1,0 +1,1 @@
+$(npm bin)/node $(npm bin)/../blankpaper/index.js $@

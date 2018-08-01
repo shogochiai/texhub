@@ -1,0 +1,25 @@
+{
+  "name": "blankpaper",
+  "version": "1.0.0",
+  "description": "Whitepaper framework",
+  "main": "index.js",
+  "bin": {
+    "blankpaper": "bin/entrypoint.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cryptoeconomicslab/blankpaper.git"
+  },
+  "author": "See 2_TRANSLATORS.tsv",
+  "license": "See 1_LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/cryptoeconomicslab/blankpaper/issues"
+  },
+  "homepage": "https://github.com/cryptoeconomicslab/blankpaper#readme",
+  "dependencies": {
+    "commander": "^2.15.1",
+    "dotenv": "^6.0.0",
+    "node-latex": "^2.4.4",
+    "package": "^1.0.1"
+  }
+}
