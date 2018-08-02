@@ -1,8 +1,9 @@
 # Blankpaper
 
-Install: `npm i blankpaper --save`
+## Installation
+`npm i blankpaper --save`
 
-Set three commands.
+## Command utilization
 ```:json
 {
   "name": "test",
@@ -17,8 +18,7 @@ Set three commands.
   }
 }
 ```
-
-
-LaTeX installation: `npm run setup`
-Template Files Generation: `npm run template`
-PDF Generation: `npm start`
+## How to use
+- LaTeX installation: `npm run setup`
+- Template Files Generation: `npm run template`
+- PDF Generation: `npm start`
