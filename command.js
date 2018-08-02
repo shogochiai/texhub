@@ -59,13 +59,13 @@ module.exports = {
 
     setup: _=>{
 
-        let curl = spawn("sh", ["-c", 'curl -sL "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh" | sh'])
+        let curl = run('curl -sL "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh" | sh')
         curl.stdout.on('data', function (data) {
             console.log('stdout: ' + data.toString());
         });
 
         curl.stderr.on('data', function (data) {
-            console.log('stderr: ' + data.toString());
+            console.error('stderr: ' + data.toString());
         });
 
         curl.on('exit', function (code) {
@@ -84,9 +84,31 @@ module.exports = {
         console.log(`Template...`)
         console.log(cmd)
         exec(cmd, dump)
+    },
+
+    install: _=>{
+console.log(require("fs").readFileSync("Texfile").toString())
+        let packages = require("fs").readFileSync("Texfile").toString().replace(/\n/g, " ")
+        let cmd = `tlmgr install ${packages}`
+        let install = run(cmd)
+        install.stdout.on('data', function (data) {
+            console.log('stdout: ' + data.toString());
+        });
+
+        install.stderr.on('data', function (data) {
+            console.error('stderr: ' + data.toString());
+        });
+
+        install.on('exit', function (code) {
+            console.log('child process exited with code ' + code.toString());
+        });
     }
 }
 
 function dump(err, stdout, stderr) {
     console.log(err, stdout, stderr)
+}
+
+function run(cmd) {
+  return spawn("sh", ["-c", cmd])
 }

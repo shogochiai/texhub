@@ -5,7 +5,7 @@ let command = require('./command')
 
 program
   .version(package.version)
-  .usage('blankpaper (setup|build)')
+  .usage(`blankpaper (${Object.keys(command).join("|")})`)
   .parse(process.argv)
 
 if(command[program.args[0]]) command[program.args[0]]()
