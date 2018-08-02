@@ -21,7 +21,7 @@
 ```
 ## How to use
 - LaTeX installation: `npm run setup`
-- Tex Package installation: `npm run install`
+- Tex Package installation: `npm run install` <--- Write definition on `Texfile` via newline separated format
 - Template Files Generation: `npm run template`
 - PDF Generation: `npm start`
 
