@@ -11,6 +11,7 @@ const hasFooter = translatorFile || contributorFile
 
 let footer = ""
 const exec = require('child_process').exec
+const spawn = require('child_process').spawn
 
 module.exports = {
     build: _=>{
@@ -57,14 +58,29 @@ module.exports = {
     },
 
     setup: _=>{
-        let cmd = `curl -sL "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh" | sh`
-        console.log(`Setup...`)
-        console.log(cmd)
-        exec(cmd, dump)
+
+        let curl = spawn("sh", ["-c", 'curl -sL "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh" | sh'])
+        curl.stdout.on('data', function (data) {
+            console.log('stdout: ' + data.toString());
+        });
+
+        curl.stderr.on('data', function (data) {
+            console.log('stderr: ' + data.toString());
+        });
+
+        curl.on('exit', function (code) {
+            console.log('child process exited with code ' + code.toString());
+        });
     },
 
     template: _=>{
-        let cmd = `cp -a ${texDir} ../${texDir}`
+        let cmd = `mkdir -p ${texDir}`
+        cmd += " && "
+        cmd += `wget https://raw.githubusercontent.com/cryptoeconomicslab/blankpaper/master/tex/00a_Header -O ${texDir}/00a_Header`
+        cmd += " && "
+        cmd += `wget https://raw.githubusercontent.com/cryptoeconomicslab/blankpaper/master/tex/00b_Abstract -O ${texDir}/00b_Abstract`
+        cmd += " && "
+        cmd += `wget https://raw.githubusercontent.com/cryptoeconomicslab/blankpaper/master/tex/01_template -O ${texDir}/01_template`
         console.log(`Template...`)
         console.log(cmd)
         exec(cmd, dump)
