@@ -11,15 +11,17 @@
   "scripts": {
     "start":"blankpaper build",
     "reset":"blankpaper template",
-    "setup":"blankpaper setup"
+    "setup":"blankpaper setup && blankpaper install"
   },
   "dependencies": {
-    "blankpaper": "^1.0.0"
+    "blankpaper": "^1.0.0",
+    "node": "~9.9.0"
   }
 }
 ```
 ## How to use
 - LaTeX installation: `npm run setup`
+- Tex Package installation: `npm run install`
 - Template Files Generation: `npm run template`
 - PDF Generation: `npm start`
 
