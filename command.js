@@ -51,7 +51,7 @@ module.exports = {
         const output = fs.createWriteStream(PDF_NAME)
         const pdf = latex(input)
         const result = await streamToPromise(pdf)
-        pdf.pipe(output)
+        fs.writeFileSync(PDF_NAME, result)
 
         // Logging
         console.log("Generating... \n")
