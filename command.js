@@ -3,6 +3,7 @@ require('dotenv').config()
 const latex = require('node-latex')
 const LATEX_END = '\\end{document}'
 const fs = require('fs')
+const streamToPromise = require('stream-to-promise')
 const PDF_NAME = "whitepaper.pdf"
 const texDir = process.env.TEX_DIR || "tex"
 const translatorFile = process.env.TRANSLATORS_FILE_NAME
@@ -10,11 +11,11 @@ const contributorFile = process.env.CONTRIBUTORS_FILE_NAME
 const hasFooter = translatorFile || contributorFile
 
 let footer = ""
-const exec = require('child_process').exec
-const spawn = require('child_process').spawn
+const exec = require('child-process-promise').exec
+const spawn = require('child-process-promise').spawn
 
 module.exports = {
-    build: _=>{
+    build: async _=>{
         // Concat sections
         let listTex = fs.readdirSync(`./${texDir}`)
         let body = listTex.map(n=> fs.readFileSync(`./${texDir}/${n}`) ).join("\n")
@@ -49,31 +50,30 @@ module.exports = {
         const input = fs.createReadStream('.bulk')
         const output = fs.createWriteStream(PDF_NAME)
         const pdf = latex(input)
-        pdf.on('error', err => console.error(err))
-        pdf.pipe(output)
+        const result = await streamToPromise(pdf)
+        fs.writeFileSync(PDF_NAME, result)
 
         // Logging
         console.log("Generating... \n")
         console.log("  > "+PDF_NAME+"\n")
+        return result
     },
 
     setup: _=>{
-
         let curl = run('curl -sL "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh" | sh')
-        curl.stdout.on('data', function (data) {
+        let childProcess = curl.childProcess
+        childProcess.stdout.on('data', function (data) {
             console.log('stdout: ' + data.toString());
         });
 
-        curl.stderr.on('data', function (data) {
+        childProcess.stderr.on('data', function (data) {
             console.error('stderr: ' + data.toString());
         });
 
-        curl.on('exit', function (code) {
-            console.log('child process exited with code ' + code.toString());
-        });
+        return curl
     },
 
-    template: _=>{
+    template: async _=>{
         let cmd = `mkdir -p ${texDir}`
         cmd += " && "
         cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/blankpaper/master/tex/00a_Header -o ${texDir}/00a_Header`
@@ -83,7 +83,7 @@ module.exports = {
         cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/blankpaper/master/tex/01_template -o ${texDir}/01_template`
         console.log(`Template...`)
         console.log(cmd)
-        exec(cmd, dump)
+        await exec(cmd, dump)
     },
 
     install: _=>{
@@ -91,17 +91,16 @@ console.log(require("fs").readFileSync("Texfile").toString())
         let packages = require("fs").readFileSync("Texfile").toString().replace(/\n/g, " ")
         let cmd = `tlmgr install ${packages}`
         let install = run(cmd)
-        install.stdout.on('data', function (data) {
+        let childProcess = install.childProcess
+        childProcess.stdout.on('data', function (data) {
             console.log('stdout: ' + data.toString());
         });
 
-        install.stderr.on('data', function (data) {
+        childProcess.stderr.on('data', function (data) {
             console.error('stderr: ' + data.toString());
         });
 
-        install.on('exit', function (code) {
-            console.log('child process exited with code ' + code.toString());
-        });
+        return install
     }
 }
 
