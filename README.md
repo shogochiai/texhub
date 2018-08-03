@@ -3,27 +3,34 @@
 ## Installation
 `npm i blankpaper --save`
 
-## Command utilization
+## package.json recommendation
 ```:json
 {
   "name": "test",
   "version": "1.0.0",
   "scripts": {
-    "start":"blankpaper build",
+    "build":"blankpaper build",
     "reset":"blankpaper template",
     "setup":"blankpaper setup && blankpaper install"
   },
   "dependencies": {
     "blankpaper": "^1.0.0",
     "node": "~9.9.0"
-  }
+  },
+  {
+    "devDependencies": {
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "build"
+  ]
 }
 ```
 ## How to use
 - LaTeX installation: `npm run setup`
 - Tex Package installation: `npm run install` <--- Write definition on `Texfile` via newline separated format
 - Template Files Generation: `npm run template`
-- PDF Generation: `npm start`
+- PDF Generation: `npm run build`
 
 ## How the Blankpaper based project looks like (for your confirmation)
 ```
