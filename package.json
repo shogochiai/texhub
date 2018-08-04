@@ -25,7 +25,7 @@
     "stream-to-promise": "^2.2.0"
   },
   "devDependencies": {
-    "post-commit": "github.com/cryptoeconomicslab/post-commit",
+    "post-commit": "https://github.com/cryptoeconomicslab/post-commit",
     "pre-commit": "^1.2.2"
   },
   "pre-commit": [
@@ -34,7 +34,7 @@
   "post-commit": [
     "erase"
   ],
-  "scripts":{
+  "scripts": {
     "test": "node test.js",
     "erase": "git checkout -- ./whitepaper.pdf"
   }
