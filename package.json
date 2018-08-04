@@ -23,5 +23,19 @@
     "node-latex": "^2.4.4",
     "package": "^1.0.1",
     "stream-to-promise": "^2.2.0"
+  },
+  "devDependencies": {
+    "post-commit": "https://github.com/cryptoeconomicslab/post-commit",
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "test"
+  ],
+  "post-commit": [
+    "erase"
+  ],
+  "scripts": {
+    "test": "node test.js",
+    "erase": "git checkout -- ./whitepaper.pdf"
   }
 }
