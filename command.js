@@ -2,7 +2,7 @@ require('dotenv').config()
 
 const LATEX_END = '\\end{document}'
 const fs = require('fs')
-const PDF_NAME = "whitepaper.pdf"
+const PDF_NAME = "whitepaper"
 const texDir = process.env.TEX_DIR || "tex"
 const translatorFile = process.env.TRANSLATORS_FILE_NAME
 const contributorFile = process.env.CONTRIBUTORS_FILE_NAME
@@ -45,9 +45,7 @@ module.exports = {
         fs.writeFileSync('.bulk', bulk)
 
         // Bake PDF
-        await cmd("pdflatex .bulk").catch(e=> console.error(e) )
-        await cmd(`mv .pdf ${PDF_NAME}`).catch(e=> console.error(e) )
-        await cmd(`rm .bulk`).catch(e=> console.error(e) )
+        await cmd(`pdflatex --jobname=${PDF_NAME} .bulk`, false).catch(e=> console.error(e) )
 
         // Logging
         console.log("Generating... \n")
@@ -75,7 +73,7 @@ module.exports = {
     install: _=>{
         console.log(require("fs").readFileSync("Texfile").toString())
         let packages = require("fs").readFileSync("Texfile").toString().replace(/\n/g, " ")
-        return cmd(`tlmgr install ${packages}`).catch(e=> console.error(e) )
+        return cmd(`tlmgr install ${packages} && texhash`, false).catch(e=> console.error(e) )
     }
 }
 
@@ -87,8 +85,8 @@ function run(cmd) {
   return spawn("sh", ["-c", cmd])
 }
 
-function cmd(c){
-  let _cmd = run(c + ' | sh')
+function cmd(c, isExec=true){
+  let _cmd = run(c + ` | ${isExec ? " | sh" : ""}`)
   let childProcess = _cmd.childProcess
   childProcess.stdout.on('data', function (data) {
       console.log('stdout: ' + data.toString());
