@@ -50,7 +50,7 @@ module.exports = {
         const input = fs.createReadStream('.bulk')
         const output = fs.createWriteStream(PDF_NAME)
         const pdf = latex(input)
-        const result = await streamToPromise(pdf)
+        const result = await streamToPromise(pdf).catch(e=> console.error(e) )
         fs.writeFileSync(PDF_NAME, result)
 
         // Logging
