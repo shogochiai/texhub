@@ -1,21 +1,21 @@
 {
-  "name": "blankpaper",
+  "name": "texhub",
   "version": "1.0.2",
   "description": "Whitepaper framework",
   "main": "index.js",
   "bin": {
-    "blankpaper": "bin/entrypoint.sh"
+    "texhub": "bin/entrypoint.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cryptoeconomicslab/blankpaper.git"
+    "url": "git+https://github.com/cryptoeconomicslab/texhub.git"
   },
   "author": "See 2_TRANSLATORS.tsv",
   "license": "See 1_LICENSE.md",
   "bugs": {
-    "url": "https://github.com/cryptoeconomicslab/blankpaper/issues"
+    "url": "https://github.com/cryptoeconomicslab/texhub/issues"
   },
-  "homepage": "https://github.com/cryptoeconomicslab/blankpaper#readme",
+  "homepage": "https://github.com/cryptoeconomicslab/texhub#readme",
   "dependencies": {
     "child-process-promise": "^2.2.1",
     "commander": "^2.15.1",

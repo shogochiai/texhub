@@ -1,7 +1,7 @@
-# Blankpaper
+# texhub
 
 ## Installation
-`npm i blankpaper --save`
+`npm i texhub --save`
 
 ## package.json recommendation
 ```:json
@@ -9,12 +9,12 @@
   "name": "test",
   "version": "1.0.0",
   "scripts": {
-    "build":"blankpaper build",
-    "reset":"blankpaper template",
-    "setup":"blankpaper setup && blankpaper install"
+    "build":"texhub build",
+    "reset":"texhub template",
+    "setup":"texhub setup && texhub install"
   },
   "dependencies": {
-    "blankpaper": "^1.0.0",
+    "texhub": "^1.0.0",
     "node": "~9.9.0"
   },
   {
@@ -32,7 +32,7 @@
 - Template Files Generation: `npm run template`
 - PDF Generation: `npm run build`
 
-## How the Blankpaper based project looks like (for your confirmation)
+## How the texhub based project looks like (for your confirmation)
 ```
 package.json
 package-lock.json

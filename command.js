@@ -76,11 +76,11 @@ module.exports = {
     template: async _=>{
         let cmd = `mkdir -p ${texDir}`
         cmd += " && "
-        cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/blankpaper/master/tex/00a_Header -o ${texDir}/00a_Header`
+        cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/texhub/master/tex/00a_Header -o ${texDir}/00a_Header`
         cmd += " && "
-        cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/blankpaper/master/tex/00b_Abstract -o ${texDir}/00b_Abstract`
+        cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/texhub/master/tex/00b_Abstract -o ${texDir}/00b_Abstract`
         cmd += " && "
-        cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/blankpaper/master/tex/01_template -o ${texDir}/01_template`
+        cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/texhub/master/tex/01_template -o ${texDir}/01_template`
         console.log(`Template...`)
         console.log(cmd)
         await exec(cmd, dump)
