@@ -5,7 +5,7 @@ let command = require('./command')
 
 program
   .version(package.version)
-  .usage(`blankpaper (${Object.keys(command).join("|")})`)
+  .usage(`texhub (${Object.keys(command).join("|")})`)
   .parse(process.argv)
 
 const cmd = program.args[0]

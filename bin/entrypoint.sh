@@ -1,1 +1,1 @@
-$(npm bin)/node $(npm bin)/../blankpaper/index.js $@
+$(npm bin)/node $(npm bin)/../texhub/index.js $@
