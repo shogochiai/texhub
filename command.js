@@ -56,7 +56,7 @@ module.exports = {
     },
 
     setup: _=>{
-        return cmd('curl -sL "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh" | sh').catch(e=> console.error(e) )
+        return cmd('curl -sL "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh"').catch(e=> console.error(e) )
     },
 
     template: async _=>{
