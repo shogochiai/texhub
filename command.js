@@ -45,7 +45,7 @@ module.exports = {
         fs.writeFileSync('.bulk', bulk)
 
         // Bake PDF
-        await cmd("pdfaltex .bulk").catch(e=> console.error(e) )
+        await cmd("pdflatex .bulk").catch(e=> console.error(e) )
         await cmd(`mv .pdf ${PDF_NAME}`).catch(e=> console.error(e) )
         await cmd(`rm .bulk`).catch(e=> console.error(e) )
 
