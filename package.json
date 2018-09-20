@@ -20,9 +20,7 @@
     "child-process-promise": "^2.2.1",
     "commander": "^2.15.1",
     "dotenv": "^6.0.0",
-    "node-latex": "^2.4.4",
-    "package": "^1.0.1",
-    "stream-to-promise": "^2.2.0"
+    "package": "^1.0.1"
   },
   "devDependencies": {
     "post-commit": "https://github.com/cryptoeconomicslab/post-commit",
