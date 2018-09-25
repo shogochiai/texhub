@@ -1,6 +1,6 @@
 {
   "name": "texhub",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Whitepaper framework",
   "main": "index.js",
   "bin": {
