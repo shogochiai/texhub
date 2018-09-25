@@ -86,7 +86,7 @@ function run(cmd) {
 }
 
 function cmd(c, isExec=true){
-  let _cmd = run(c + ` | ${isExec ? " | sh" : ""}`)
+  let _cmd = run(c + `${isExec ? " | sh" : ""}`)
   let childProcess = _cmd.childProcess
   childProcess.stdout.on('data', function (data) {
       console.log('stdout: ' + data.toString());
