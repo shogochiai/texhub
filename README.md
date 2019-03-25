@@ -17,8 +17,7 @@
     "texhub": "^1.0.0",
     "node": "~9.9.0"
   },
-  {
-    "devDependencies": {
+  "devDependencies": {
     "pre-commit": "^1.2.2"
   },
   "pre-commit": [
