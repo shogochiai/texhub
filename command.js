@@ -1,29 +1,38 @@
-require('dotenv').config()
+require("dotenv").config();
 
-const LATEX_END = '\\end{document}'
-const fs = require('fs')
-const PDF_NAME = "whitepaper"
-const texDir = process.env.TEX_DIR || "tex"
-const translatorFile = process.env.TRANSLATORS_FILE_NAME
-const contributorFile = process.env.CONTRIBUTORS_FILE_NAME
-const hasFooter = translatorFile || contributorFile
+const LATEX_END = "\\end{document}";
+const fs = require("fs");
+const LANG = process.env.LANG || "";
+const PDF_NAME = "whitepaper" + (LANG ? `.${LANG}` : "");
+const texDir = LANG ? `tex_${LANG}` : "tex";
+const translatorFile = process.env.TRANSLATORS_FILE_NAME;
+const contributorFile = process.env.CONTRIBUTORS_FILE_NAME;
+const hasFooter = translatorFile || contributorFile;
+const TEXBINDIR = "./texlive/bin/x86_64-darwin";
 
-let footer = ""
-const exec = require('child-process-promise').exec
-const spawn = require('child-process-promise').spawn
+let footer = "";
+const exec = require("child-process-promise").exec;
+const spawn = require("child-process-promise").spawn;
 
 module.exports = {
-    build: async _=>{
-        // Concat sections
-        let listTex = fs.readdirSync(`./${texDir}`)
-        let body = listTex.map(n=> fs.readFileSync(`./${texDir}/${n}`) ).join("\n")
+  build: async (_) => {
+    // Concat sections
+    let listTex = fs.readdirSync(`./${texDir}`);
+    let body = listTex
+      .map((n) => fs.readFileSync(`./${texDir}/${n}`))
+      .join("\n");
 
-        if(hasFooter) {
-            let translatorsBlock = fs.readFileSync(translatorFile).toString().split('\n').map(t=> t.replace(/  /, ' / ') ).join('\n')
-            let contributersBlock = fs.readFileSync(contributorFile)
-            
-            // Transalators and Contributors
-            footer = `
+    if (hasFooter) {
+      let translatorsBlock = fs
+        .readFileSync(translatorFile)
+        .toString()
+        .split("\n")
+        .map((t) => t.replace(/  /, " / "))
+        .join("\n");
+      let contributersBlock = fs.readFileSync(contributorFile);
+
+      // Transalators and Contributors
+      footer = `
             \\pagebreak
             \\Large{Special Thanks}
             \\
@@ -37,63 +46,79 @@ module.exports = {
             \\small{Contributors}
             \\
             \\scriptsize{${contributersBlock}}
-            `.replace(/\n/g, '\n\n')//latex way. empty line is \\
-        }
-
-        // Make it bulk and save as hidden file
-        let bulk = `${body}\n${footer}\n${LATEX_END}`
-        fs.writeFileSync('.bulk', bulk)
-
-        // Bake PDF
-        await cmd(`pdflatex --jobname=${PDF_NAME} .bulk`, false).catch(e=> console.error(e) )
-
-        // Logging
-        console.log("Generating... \n")
-        console.log("  > "+PDF_NAME+"\n")
-        return true
-    },
-
-    setup: _=>{
-        return cmd('curl -sL "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh"').catch(e=> console.error(e) )
-    },
-
-    template: async _=>{
-        let cmd = `mkdir -p ${texDir}`
-        cmd += " && "
-        cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/texhub/master/tex/00a_Header -o ${texDir}/00a_Header`
-        cmd += " && "
-        cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/texhub/master/tex/00b_Abstract -o ${texDir}/00b_Abstract`
-        cmd += " && "
-        cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/texhub/master/tex/01_template -o ${texDir}/01_template`
-        console.log(`Template...`)
-        console.log(cmd)
-        await exec(cmd, dump)
-    },
-
-    install: _=>{
-        console.log(require("fs").readFileSync("Texfile").toString())
-        let packages = require("fs").readFileSync("Texfile").toString().replace(/\n/g, " ")
-        return cmd(`tlmgr install ${packages} && texhash`, false).catch(e=> console.error(e) )
+            `.replace(/\n/g, "\n\n"); //latex way. empty line is \\
     }
-}
+
+    // Make it bulk and save as hidden file
+    let bulk = `${body}\n${footer}\n${LATEX_END}`;
+    fs.writeFileSync(".bulk", bulk);
+
+    // Bake PDF
+    await cmd(
+      `${TEXBINDIR}/pdflatex --jobname=${PDF_NAME} .bulk`,
+      false
+    ).catch((e) => console.error(e));
+
+    // Logging
+    console.log("Generating... \n");
+    console.log(`  > ${PDF_NAME}.pdf \n`);
+    await cmd(`rm ${PDF_NAME}.aux ${PDF_NAME}.log`);
+    return true;
+  },
+
+  setup: async (_) => {
+    await cmd('curl -sL "https://yihui.org/gh/tinytex/tools/install-base.sh"');
+    await cmd(
+      `${TEXBINDIR}/tlmgr install luahbtex collection-fontsrecommended`,
+      false
+    );
+    await cmd(
+      'curl -sL "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh"'
+    );
+  },
+
+  template: async (_) => {
+    let cmd = `mkdir -p ${texDir}`;
+    cmd += " && ";
+    cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/texhub/master/tex/00a_Header -o ${texDir}/00a_Header`;
+    cmd += " && ";
+    cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/texhub/master/tex/00b_Abstract -o ${texDir}/00b_Abstract`;
+    cmd += " && ";
+    cmd += `curl https://raw.githubusercontent.com/cryptoeconomicslab/texhub/master/tex/01_template -o ${texDir}/01_template`;
+    console.log(`Template...`);
+    console.log(cmd);
+    await exec(cmd, dump);
+  },
+
+  install: (_) => {
+    console.log(require("fs").readFileSync("Texfile").toString());
+    let packages = require("fs")
+      .readFileSync("Texfile")
+      .toString()
+      .replace(/\n/g, " ");
+    return cmd(`tlmgr install ${packages} && texhash`, false).catch((e) =>
+      console.error(e)
+    );
+  },
+};
 
 function dump(err, stdout, stderr) {
-    console.log(err, stdout, stderr)
+  console.log(err, stdout, stderr);
 }
 
 function run(cmd) {
-  return spawn("sh", ["-c", cmd])
+  return spawn("sh", ["-c", cmd]);
 }
 
-function cmd(c, isExec=true){
-  let _cmd = run(c + `${isExec ? " | sh" : ""}`)
-  let childProcess = _cmd.childProcess
-  childProcess.stdout.on('data', function (data) {
-      console.log('stdout: ' + data.toString());
+function cmd(c, isExec = true) {
+  let _cmd = run(c + `${isExec ? " | sh" : ""}`);
+  let childProcess = _cmd.childProcess;
+  childProcess.stdout.on("data", function (data) {
+    console.log("stdout: " + data.toString());
   });
 
-  childProcess.stderr.on('data', function (data) {
-      console.error('stderr: ' + data.toString());
+  childProcess.stderr.on("data", function (data) {
+    console.error("stderr: " + data.toString());
   });
-  return _cmd
+  return _cmd;
 }

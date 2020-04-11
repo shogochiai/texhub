@@ -62,6 +62,7 @@ typings/
 
 # LaTeX
 texput.log
+texlive
 
 # Original file
 .bulk
