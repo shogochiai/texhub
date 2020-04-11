@@ -67,14 +67,19 @@ module.exports = {
   },
 
   setup: async (_) => {
-    await cmd('curl -sL "https://yihui.org/gh/tinytex/tools/install-base.sh"');
-    await cmd(
+    let errcode = 0;
+    errcode = await cmd(
+      'curl -sL "https://yihui.org/gh/tinytex/tools/install-base.sh"'
+    ).catch(() => 1);
+    errcode = await cmd(
       `${TEXBINDIR}/tlmgr install luahbtex collection-fontsrecommended`,
       false
-    );
-    await cmd(
+    ).catch(() => 2);
+    errcode = await cmd(
       'curl -sL "https://github.com/yihui/tinytex/raw/master/tools/install-unx.sh"'
-    );
+    ).catch(() => 3);
+    console.log(`setup errcode ${errcode}`);
+    return errcode;
   },
 
   template: async (_) => {
