@@ -34,6 +34,6 @@
   ],
   "scripts": {
     "test": "node test.js",
-    "erase": "git checkout -- ./whitepaper.pdf"
+    "erase": "git checkout -- ./whitepaper.*"
   }
 }
