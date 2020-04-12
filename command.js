@@ -16,24 +16,25 @@ const spawn = require("child-process-promise").spawn;
 
 module.exports = {
   build: async (_) => {
-    await _pkgsync();
-    // Concat sections
-    let listTex = fs.readdirSync(`./${texDir}`);
-    let body = listTex
-      .map((n) => fs.readFileSync(`./${texDir}/${n}`))
-      .join("\n");
-
-    if (hasFooter) {
-      let translatorsBlock = fs
-        .readFileSync(translatorFile)
-        .toString()
-        .split("\n")
-        .map((t) => t.replace(/  /, " / "))
+    try {
+      await _pkgsync();
+      // Concat sections
+      let listTex = fs.readdirSync(`./${texDir}`);
+      let body = listTex
+        .map((n) => fs.readFileSync(`./${texDir}/${n}`))
         .join("\n");
-      let contributersBlock = fs.readFileSync(contributorFile);
 
-      // Transalators and Contributors
-      footer = `
+      if (hasFooter) {
+        let translatorsBlock = fs
+          .readFileSync(translatorFile)
+          .toString()
+          .split("\n")
+          .map((t) => t.replace(/  /, " / "))
+          .join("\n");
+        let contributersBlock = fs.readFileSync(contributorFile);
+
+        // Transalators and Contributors
+        footer = `
             \\pagebreak
             \\Large{Special Thanks}
             \\
@@ -48,22 +49,25 @@ module.exports = {
             \\
             \\scriptsize{${contributersBlock}}
             `.replace(/\n/g, "\n\n"); //latex way. empty line is \\
+      }
+
+      // Make it bulk and save as hidden file
+      let bulk = `${body}\n${footer}\n${LATEX_END}`;
+      fs.writeFileSync(".bulk", bulk);
+
+      // Bake PDF
+      await cmd(
+        `${TEXBINDIR}/pdflatex --jobname=${PDF_NAME} .bulk`,
+        false
+      ).catch((e) => console.error(e));
+
+      // Logging
+      console.log("Generating... \n");
+      console.log(`  > ${PDF_NAME}.pdf \n`);
+      await cmd(`rm ${PDF_NAME}.aux ${PDF_NAME}.log *.sty`);
+    } catch (e) {
+      await cmd(`rm ${PDF_NAME}.aux ${PDF_NAME}.log *.sty`);
     }
-
-    // Make it bulk and save as hidden file
-    let bulk = `${body}\n${footer}\n${LATEX_END}`;
-    fs.writeFileSync(".bulk", bulk);
-
-    // Bake PDF
-    await cmd(
-      `${TEXBINDIR}/pdflatex --jobname=${PDF_NAME} .bulk`,
-      false
-    ).catch((e) => console.error(e));
-
-    // Logging
-    console.log("Generating... \n");
-    console.log(`  > ${PDF_NAME}.pdf \n`);
-    await cmd(`rm ${PDF_NAME}.aux ${PDF_NAME}.log *.sty`);
     return true;
   },
 
