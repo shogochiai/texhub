@@ -64,9 +64,9 @@ module.exports = {
       // Logging
       console.log("Generating... \n");
       console.log(`  > ${PDF_NAME}.pdf \n`);
-      await cmd(`rm ${PDF_NAME}.aux ${PDF_NAME}.log *.sty`);
+      await cmd(`rm ${PDF_NAME}.aux ${PDF_NAME}.log *.sty *.cls *.def`);
     } catch (e) {
-      await cmd(`rm ${PDF_NAME}.aux ${PDF_NAME}.log *.sty`);
+      await cmd(`rm ${PDF_NAME}.aux ${PDF_NAME}.log *.sty *.cls *.def`);
     }
     return true;
   },
@@ -142,7 +142,15 @@ async function _pkgsync() {
     false
   );
   await cmd(
-    "ls /Users/sg/Library/TinyTeX/texmf-dist/tex/latex/*/*sty | xargs -I{} ln -s {} ./",
+    "ls /Users/sg/Library/TinyTeX/texmf-dist/tex/latex/*/*.sty | xargs -I{} ln -s {} ./",
+    false
+  );
+  await cmd(
+    "ls /Users/sg/Library/TinyTeX/texmf-dist/tex/latex/*/*.cls | xargs -I{} ln -s {} ./",
+    false
+  );
+  await cmd(
+    "ls /Users/sg/Library/TinyTeX/texmf-dist/tex/latex/*/*.def | xargs -I{} ln -s {} ./",
     false
   );
 }
