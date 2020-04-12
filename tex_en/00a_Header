@@ -1,5 +1,7 @@
 \documentclass[12pt,a4paper,pdflatex]{article}
 \usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+
 
 \title{Whitepaper Title}
 \author{John Doe john@cryptoeconomicslab.com}

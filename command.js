@@ -16,6 +16,7 @@ const spawn = require("child-process-promise").spawn;
 
 module.exports = {
   build: async (_) => {
+    await _pkgsync();
     // Concat sections
     let listTex = fs.readdirSync(`./${texDir}`);
     let body = listTex
@@ -62,7 +63,7 @@ module.exports = {
     // Logging
     console.log("Generating... \n");
     console.log(`  > ${PDF_NAME}.pdf \n`);
-    await cmd(`rm ${PDF_NAME}.aux ${PDF_NAME}.log`);
+    await cmd(`rm ${PDF_NAME}.aux ${PDF_NAME}.log *.sty`);
     return true;
   },
 
@@ -81,7 +82,9 @@ module.exports = {
     console.log(`setup errcode ${errcode}`);
     return errcode;
   },
-
+  pkgsync: async (_) => {
+    await _pkgsync();
+  },
   template: async (_) => {
     let cmd = `mkdir -p ${texDir}`;
     cmd += " && ";
@@ -126,4 +129,16 @@ function cmd(c, isExec = true) {
     console.error("stderr: " + data.toString());
   });
   return _cmd;
+}
+
+async function _pkgsync() {
+  await cmd("kpsewhich `head -n 1 Texfile`.sty > .kpsepath", false);
+  await cmd(
+    "cat .kpsepath | sed -e 's/\\/[a-zA-Z0-9]*\\/[a-zA-Z0-9]*\\.sty$//g' > .kpsedir",
+    false
+  );
+  await cmd(
+    "ls /Users/sg/Library/TinyTeX/texmf-dist/tex/latex/*/*sty | xargs -I{} ln -s {} ./",
+    false
+  );
 }
