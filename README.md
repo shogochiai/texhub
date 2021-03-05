@@ -1,42 +1,28 @@
 # texhub
 
+Tex GUI eats your storage and it's hard to use!
+
+Texhub offers you a CUI centric experience of Tex.
+
+## Features
+- Fexfile-based package manager
+- versioning via git
+- tinytex-based storage-saving environment
+
 ## Installation
-`npm i texhub --save`
 
-## package.json recommendation
-```:json
-{
-  "name": "test",
-  "version": "1.0.0",
-  "scripts": {
-    "build":"texhub build",
-    "reset":"texhub template",
-    "setup":"texhub setup && texhub install"
-  },
-  "dependencies": {
-    "texhub": "^1.0.0",
-    "node": "~9.9.0"
-  },
-  "devDependencies": {
-    "pre-commit": "^1.2.2"
-  },
-  "pre-commit": [
-    "build"
-  ]
-}
-```
-## How to use
-- LaTeX installation: `npm run setup`
-- Tex Package installation: `npm run install` <--- Write definition on `Texfile` via newline separated format
-- Template Files Generation: `npm run template`
-- PDF Generation: `npm run build`
+- `npm i`
+- `npm i -g texhub pdflatex` (tips: for texhub v0.0.13, you have to replace TEXBINDIR to /usr/local/bin)
+- `npm start`
+- `open whitepaper.pdf`
 
-## How the texhub based project looks like (for your confirmation)
-```
-package.json
-package-lock.json
-node_modules
-tex            <--- Your genius idea is here!
-.bulk          <--- Intermediate concatenated tex texts
-whitepaper.pdf <--- Your fans will read this!
-```
+## How to extend
+
+- Modify template files under `/tex` and `/figs`
+- Add some [Tex Packages](https://ctan.org/search) to `/Texfile`
+- `npm start` and see compilation result
+- `open whitepaper.pdf`
+
+## Note
+
+- You can use English and [Japanese](https://texwiki.texjp.org/?BXjscls) at least. But haven't confirmed other languages. Conribution is always welcome and email me we you did some hack to ping me! (shogo.ochiai@protonmail.com)
