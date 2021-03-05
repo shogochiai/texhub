@@ -12,7 +12,7 @@ Texhub offers you a CUI centric experience of Tex.
 ## Installation
 
 - `npm i`
-- `npm i -g texhub pdflatex` (tips: for texhub v0.0.13, you have to replace TEXBINDIR to /usr/local/bin)
+- `npm i -g texhub pdflatex` (tips: for texhub v0.0.13, you have to replace TEXBINDIR to /usr/local/bin in the command.js of texhub)
 - `npm start`
 - `open whitepaper.pdf`
 
